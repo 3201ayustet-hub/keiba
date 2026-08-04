@@ -1,0 +1,12 @@
+{
+  "name": "horse-bet-battle-mvp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "競馬馬券勝負データ管理アプリ MVP",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
