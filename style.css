@@ -3075,3 +3075,115 @@ body{letter-spacing:.005em}
  .hbb-ticket-v7-metric{padding:4px}.hbb-ticket-v7-metric:first-child{padding-left:0}.hbb-ticket-v7-metric:last-child{padding-right:0}.hbb-ticket-v7-metric small{font-size:3px}.hbb-ticket-v7-metric strong{font-size:5px;margin-top:1px}
  .hbb-ticket-v7-art{min-height:43px;margin-top:2px}.hbb-ticket-v7-foot{grid-template-columns:minmax(0,1fr) 76px;gap:4px;padding-top:2px}.hbb-ticket-v7-barcode{height:13px}.hbb-ticket-v7-code{font-size:2.6px}
 }
+
+
+/* =========================================================
+   v4.10 — TOP returns to MAX PAYOUT + retro race forms
+   ========================================================= */
+.retro-race-form{
+  gap:12px!important;
+  padding:2px 0 0;
+}
+.retro-race-form .compact-form-head{
+  position:relative;
+  padding:10px 11px 11px;
+  border:1px solid #5d4a25;
+  border-radius:4px;
+  background:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px),
+    linear-gradient(180deg,#151914,#0a0d0b);
+  box-shadow:inset 0 0 0 1px rgba(213,178,91,.08), 3px 3px 0 #090b09;
+}
+.retro-race-form .compact-form-head::before{
+  content:'RACE TERMINAL';
+  position:absolute;
+  top:-7px;
+  left:9px;
+  padding:0 5px;
+  color:#d5b35b;
+  background:#0d100e;
+  font:700 7px/1 var(--font-num,ui-monospace,monospace);
+  letter-spacing:.16em;
+}
+.retro-race-form .compact-form-head .eyebrow{
+  color:#d5b35b!important;
+  font-family:var(--font-num,ui-monospace,monospace);
+  font-size:8px!important;
+  letter-spacing:.18em!important;
+}
+.retro-race-form .compact-form-head h2{
+  color:#f0eee6;
+  font-size:21px;
+  letter-spacing:.02em;
+  text-shadow:2px 2px 0 #050605;
+}
+.retro-race-form .compact-form-head>small{
+  color:#7f8881;
+  font-family:var(--font-num,ui-monospace,monospace);
+}
+.retro-race-form .compact-fields{
+  padding:2px;
+  gap:9px!important;
+}
+.retro-race-form .compact-fields label{
+  color:#a7aaa4!important;
+  font-family:var(--font-num,ui-monospace,monospace);
+  letter-spacing:.05em;
+}
+.retro-race-form .compact-fields input,
+.retro-race-form .compact-fields select{
+  border:1px solid #4a514b!important;
+  border-radius:3px!important;
+  background:#080b09!important;
+  color:#e7e5dc!important;
+  box-shadow:inset 2px 2px 0 rgba(255,255,255,.025), inset -2px -2px 0 rgba(0,0,0,.35);
+}
+.retro-race-form .compact-fields input:focus,
+.retro-race-form .compact-fields select:focus{
+  border-color:#b58e3c!important;
+  outline:2px solid rgba(181,142,60,.14)!important;
+}
+.retro-race-form .compact-fields label.wide input{
+  min-height:42px!important;
+  font-size:17px!important;
+}
+.retro-race-form .compact-actions{
+  border-top:1px solid #3a3f3a!important;
+  background:linear-gradient(180deg,rgba(8,11,9,.96),#080a08)!important;
+}
+.retro-race-form .compact-actions .button{
+  border-radius:3px!important;
+  min-height:43px!important;
+  font-family:var(--font-num,ui-monospace,monospace);
+  letter-spacing:.05em;
+  box-shadow:2px 2px 0 #050605;
+}
+.retro-race-form .compact-actions .button.primary{
+  border:1px solid #3b9a70;
+  background:#176b4d;
+}
+.retro-race-form .compact-actions .button.ghost{
+  border:1px solid #555b55;
+  background:#10130f;
+  color:#d0d2cb;
+}
+.retro-race-form .compact-actions .button.danger{
+  border:1px solid #713735;
+  background:#291314;
+  color:#e78a82;
+}
+.retro-race-form #raceFormError,
+.retro-race-form #raceEditError{
+  padding:7px 9px;
+  border:1px solid #653b38;
+  border-radius:3px;
+  background:#1b100f;
+}
+
+@media(max-width:620px){
+  .retro-race-form .compact-form-head{padding:9px 10px 10px}
+  .retro-race-form .compact-form-head h2{font-size:19px}
+  .retro-race-form .compact-fields{gap:8px!important}
+  .retro-race-form .compact-fields input,
+  .retro-race-form .compact-fields select{height:39px!important;min-height:39px!important}
+}

@@ -41,14 +41,25 @@ const SILK_PATTERNS = [
   { id:'vertical', name:'縦縞' },
   { id:'sash', name:'たすき' },
   { id:'check', name:'市松' },
-  { id:'chevron', name:'山形' }
+  { id:'chevron', name:'山形' },
+  { id:'polka', name:'水玉' },
+  { id:'diamond', name:'ダイヤモンド' },
+  { id:'cross', name:'十字' },
+  { id:'zigzag', name:'ジグザグ' },
+  { id:'star', name:'星' },
+  { id:'argyle', name:'ひし形' },
+  { id:'dots', name:'ドット縦' },
+  { id:'wave', name:'波形' }
 ];
 
 const SILK_SLEEVE_PATTERNS = [
   { id:'solid', name:'無地' },
   { id:'band', name:'一本輪' },
   { id:'double-band', name:'二本輪' },
-  { id:'stripe', name:'縦切替' }
+  { id:'stripe', name:'縦切替' },
+  { id:'chevron', name:'山形' },
+  { id:'dots', name:'水玉' },
+  { id:'contrast', name:'袖口切替' }
 ];
 
 const SILK_DEFAULT_PATTERN_COLORS = ['#ece9df','#d7b85b','#202522','#b33e3e','#315eaf'];
@@ -61,7 +72,7 @@ function normalizeHex(value, fallback) {
 function participantStyle(competition, participant) {
   const index = Math.max(0, competition.participants.findIndex(p => p.id === participant.id));
   const preset = SILK_PRESETS.find(item => item.id === participant.silksColor) || SILK_PRESETS[index % SILK_PRESETS.length];
-  const legacyPattern = participant.silksPattern || SILK_PATTERNS[index % 4].id;
+  const legacyPattern = participant.silksPattern || SILK_PATTERNS[index % SILK_PATTERNS.length].id;
   const defaultPattern = SILK_PATTERNS.some(x => x.id === legacyPattern) ? legacyPattern : 'solid';
   const body = normalizeHex(participant.silksBodyColor, preset.color);
   const sleeve = normalizeHex(participant.silksSleeveColor, body);
@@ -95,6 +106,29 @@ function silkBodyPatternSvg(style, clipId) {
     return `<g clip-path="url(#${clipId})" opacity=".94">${squares}</g>`;
   }
   if (style.bodyPattern === 'chevron') return `<g clip-path="url(#${clipId})"><path d="M17 26 L32 39 L47 26 L47 35 L32 48 L17 35 Z" fill="${c}"/></g>`;
+  if (style.bodyPattern === 'polka') {
+    let dots = '';
+    for (let y = 18; y <= 54; y += 12) for (let x = 22; x <= 46; x += 12) dots += `<circle cx="${x}" cy="${y}" r="3" fill="${c}"/>`;
+    return `<g clip-path="url(#${clipId})">${dots}</g>`;
+  }
+  if (style.bodyPattern === 'diamond') {
+    let diamonds = '';
+    for (let y = 16; y <= 56; y += 14) for (let x = 20; x <= 48; x += 14) diamonds += `<path d="M${x} ${y-5} L${x+5} ${y} L${x} ${y+5} L${x-5} ${y} Z" fill="${c}"/>`;
+    return `<g clip-path="url(#${clipId})">${diamonds}</g>`;
+  }
+  if (style.bodyPattern === 'cross') return `<g clip-path="url(#${clipId})"><path d="M29 12 H35 V29 H46 V35 H35 V52 H29 V35 H18 V29 H29 Z" fill="${c}"/></g>`;
+  if (style.bodyPattern === 'zigzag') return `<g clip-path="url(#${clipId})"><path d="M16 20 L24 27 L32 20 L40 27 L48 20 L48 29 L40 36 L32 29 L24 36 L16 29 Z" fill="${c}"/><path d="M16 40 L24 47 L32 40 L40 47 L48 40 L48 49 L40 56 L32 49 L24 56 L16 49 Z" fill="${c}"/></g>`;
+  if (style.bodyPattern === 'star') {
+    const star = (cx, cy, r) => { let d=''; for (let i=0;i<10;i++){ const a=-Math.PI/2+i*Math.PI/5, rr=i%2?r:r*.42; d += `${i?'L':'M'}${(cx+Math.cos(a)*rr).toFixed(1)} ${(cy+Math.sin(a)*rr).toFixed(1)} `; } return d+'Z'; };
+    return `<g clip-path="url(#${clipId})"><path d="${star(25,25,7)}" fill="${c}"/><path d="${star(39,43,7)}" fill="${c}"/><path d="${star(40,22,4.5)}" fill="${c}"/></g>`;
+  }
+  if (style.bodyPattern === 'argyle') {
+    let shapes='';
+    for (let y=16;y<58;y+=14) for(let x=20;x<50;x+=14) shapes += `<path d="M${x} ${y-7} L${x+7} ${y} L${x} ${y+7} L${x-7} ${y} Z" fill="${c}" opacity=".92"/>`;
+    return `<g clip-path="url(#${clipId})">${shapes}<path d="M15 15 L49 57 M49 15 L15 57" stroke="${c}" stroke-width="2" opacity=".35"/></g>`;
+  }
+  if (style.bodyPattern === 'dots') return `<g clip-path="url(#${clipId})"><circle cx="24" cy="18" r="2.5" fill="${c}"/><circle cx="40" cy="28" r="2.5" fill="${c}"/><circle cx="24" cy="38" r="2.5" fill="${c}"/><circle cx="40" cy="48" r="2.5" fill="${c}"/></g>`;
+  if (style.bodyPattern === 'wave') return `<g clip-path="url(#${clipId})"><path d="M15 23 C21 15 27 31 33 23 S45 15 51 23" fill="none" stroke="${c}" stroke-width="5"/><path d="M15 41 C21 33 27 49 33 41 S45 33 51 41" fill="none" stroke="${c}" stroke-width="5"/></g>`;
   return '';
 }
 
@@ -109,6 +143,9 @@ function silkSleevePatternSvg(style, leftClip, rightClip) {
   if (style.sleevePattern === 'stripe') {
     return `<g fill="${c}"><g clip-path="url(#${leftClip})"><path d="M11 13 L16 11 L21 33 L16 36 Z"/></g><g clip-path="url(#${rightClip})"><path d="M53 13 L48 11 L43 33 L48 36 Z"/></g></g>`;
   }
+  if (style.sleevePattern === 'chevron') return `<g fill="${c}"><g clip-path="url(#${leftClip})"><path d="M7 20 L14 26 L19 20 L21 25 L15 33 L8 27 Z"/></g><g clip-path="url(#${rightClip})"><path d="M57 20 L50 26 L45 20 L43 25 L49 33 L56 27 Z"/></g></g>`;
+  if (style.sleevePattern === 'dots') return `<g fill="${c}"><g clip-path="url(#${leftClip})"><circle cx="12" cy="22" r="3"/><circle cx="15" cy="31" r="3"/></g><g clip-path="url(#${rightClip})"><circle cx="52" cy="22" r="3"/><circle cx="49" cy="31" r="3"/></g></g>`;
+  if (style.sleevePattern === 'contrast') return `<g fill="${c}"><path d="M4 25 L12 34 L20 28 L18 36 L10 40 L3 32 Z"/><path d="M60 25 L52 34 L44 28 L46 36 L54 40 L61 32 Z"/></g>`;
   return '';
 }
 
@@ -512,6 +549,7 @@ app.addEventListener('click', event => {
   if (action === 'edit-competition') openCompetitionEdit();
   if (action === 'open-admin') location.hash = `#/competition/${currentCompetitionId}/admin`;
   if (action === 'back-dashboard') location.hash = `#/competition/${currentCompetitionId}`;
+  if (action === 'top-board') document.querySelector('#dashboard-board')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   if (action === 'add-participant') openParticipantForm();
   if (action === 'add-race') openRaceForm();
   if (action === 'edit-entry') openEntryForm(event.target.closest('[data-race-id]').dataset.raceId, event.target.closest('[data-participant-id]').dataset.participantId);
@@ -598,7 +636,7 @@ function updateCompetition(form) {
 
 function openParticipantForm() {
   const competition = getCompetition();
-  if (competition.participants.length >= 8) return alert('参加者は最大8人までです。');
+  if (competition.participants.length >= 12) return alert('参加者は最大12人までです。');
   openModal(`
     <form id="participantForm">
       <h2>参加者を追加</h2>
@@ -613,18 +651,18 @@ function createParticipant(form) {
   const name = String(readForm(form).name || '').trim();
   const error = form.querySelector('#participantError');
   if (!name) return showFormError(error, '名前を入力してください。');
-  if (competition.participants.length >= 8) return showFormError(error, '参加者は最大8人までです。');
+  if (competition.participants.length >= 12) return showFormError(error, '参加者は最大12人までです。');
   if (competition.participants.some(item => item.name === name)) return showFormError(error, '同じ名前の参加者が登録されています。');
   const index = competition.participants.length;
   const preset = SILK_PRESETS[index % SILK_PRESETS.length];
   const participant = {
     id: uid('participant'), name,
     silksColor: preset.id,
-    silksPattern: SILK_PATTERNS[index % 4].id,
+    silksPattern: SILK_PATTERNS[index % SILK_PATTERNS.length].id,
     silksBodyColor: preset.color,
     silksSleeveColor: preset.color,
     silksPatternColor: SILK_DEFAULT_PATTERN_COLORS[index % SILK_DEFAULT_PATTERN_COLORS.length],
-    silksBodyPattern: SILK_PATTERNS[index % 4].id,
+    silksBodyPattern: SILK_PATTERNS[index % SILK_PATTERNS.length].id,
     silksSleevePattern: 'solid'
   };
   competition.participants.push(participant);
@@ -730,7 +768,7 @@ function updateParticipant(form) {
 
 function openRaceForm() {
   openModal(`
-    <form id="raceForm" class="compact-admin-form">
+    <form id="raceForm" class="compact-admin-form retro-race-form">
       <div class="compact-form-head"><div><p class="eyebrow">NEW RACE</p><h2>レース追加</h2></div></div>
       <div class="compact-fields race-compact-fields">
         <label class="wide">レース名<input name="name" required maxlength="100" placeholder="例：有馬記念"></label>
@@ -765,7 +803,7 @@ function openRaceEditForm(raceId) {
   const race = competition.races.find(item => item.id === raceId);
   if (!race) return;
   openModal(`
-    <form id="raceEditForm" class="compact-admin-form">
+    <form id="raceEditForm" class="compact-admin-form retro-race-form">
       <input type="hidden" name="raceId" value="${esc(race.id)}">
       <div class="compact-form-head">
         <div><p class="eyebrow">RACE SETTINGS</p><h2>レース編集</h2></div>
@@ -1121,7 +1159,7 @@ function renderCompetition(competition) {
 
 function bottomNav(active = '') {
   return `<nav class="score-bottom-nav" aria-label="画面内ナビゲーション">
-    <button class="${active === 'top' ? 'is-active' : ''}" type="button" data-action="back-dashboard"><b>⌂</b><span>TOP</span></button>
+    <button class="${active === 'top' ? 'is-active' : ''}" type="button" data-action="top-board"><b>⌂</b><span>TOP</span></button>
     <button class="${active === 'races' ? 'is-active' : ''}" type="button" data-scroll-target="#dashboard-races"><b>≡</b><span>RACES</span></button>
     <button class="${active === 'players' ? 'is-active' : ''}" type="button" data-scroll-target="#dashboard-players"><b>♙</b><span>PLAYERS</span></button>
     <button class="${active === 'rank' ? 'is-active' : ''}" type="button" data-action="view-rank-history"><b>↗</b><span>RANK</span></button>
@@ -1154,7 +1192,7 @@ function renderAdmin(competition) {
       <section class="score-panel admin-score-panel" id="dashboard-players">
         <div class="score-panel-head">
           <span>PLAYERS</span>
-          <button class="admin-inline-add" type="button" data-action="add-participant" ${competition.participants.length >= 8 ? 'disabled' : ''}>＋ 参加者</button>
+          <button class="admin-inline-add" type="button" data-action="add-participant" ${competition.participants.length >= 12 ? 'disabled' : ''}>＋ 参加者</button>
         </div>
         <div class="admin-list clean-admin-list">
           ${competition.participants.map(p => adminParticipantRow(competition, summary, p)).join('') || '<div class="score-empty compact">参加者がいません。</div>'}
