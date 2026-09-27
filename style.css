@@ -3076,114 +3076,127 @@ body{letter-spacing:.005em}
  .hbb-ticket-v7-art{min-height:43px;margin-top:2px}.hbb-ticket-v7-foot{grid-template-columns:minmax(0,1fr) 76px;gap:4px;padding-top:2px}.hbb-ticket-v7-barcode{height:13px}.hbb-ticket-v7-code{font-size:2.6px}
 }
 
-
 /* =========================================================
-   v4.10 — TOP returns to MAX PAYOUT + retro race forms
+   v4.11 RETRO RACE INPUT
+   Race add/edit forms intentionally use a different visual layer:
+   16-bit / arcade-inspired, while preserving the app's dark palette.
    ========================================================= */
 .retro-race-form{
-  gap:12px!important;
-  padding:2px 0 0;
+  position:relative;
+  overflow:hidden;
+  border:2px solid #c7a84b!important;
+  border-radius:4px!important;
+  padding:18px!important;
+  background:
+    linear-gradient(rgba(255,255,255,.018) 50%, transparent 50%) 0 0/100% 4px,
+    radial-gradient(circle at 50% -10%, rgba(199,168,75,.13), transparent 42%),
+    #070908!important;
+  box-shadow:inset 0 0 0 1px #4a3b19, 0 0 0 4px #141713, 0 12px 34px rgba(0,0,0,.42)!important;
+  image-rendering:pixelated;
+}
+.retro-race-form::before{
+  content:"RACE EDITOR // INSERT COIN";
+  display:block;
+  margin:-18px -18px 15px;
+  padding:8px 12px;
+  border-bottom:2px solid #4d401e;
+  background:#0c110d;
+  color:#d9bc62;
+  font:700 10px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.18em;
+  text-shadow:2px 0 #2d6d4e;
 }
 .retro-race-form .compact-form-head{
-  position:relative;
-  padding:10px 11px 11px;
-  border:1px solid #5d4a25;
-  border-radius:4px;
-  background:
-    repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px),
-    linear-gradient(180deg,#151914,#0a0d0b);
-  box-shadow:inset 0 0 0 1px rgba(213,178,91,.08), 3px 3px 0 #090b09;
-}
-.retro-race-form .compact-form-head::before{
-  content:'RACE TERMINAL';
-  position:absolute;
-  top:-7px;
-  left:9px;
-  padding:0 5px;
-  color:#d5b35b;
-  background:#0d100e;
-  font:700 7px/1 var(--font-num,ui-monospace,monospace);
-  letter-spacing:.16em;
-}
-.retro-race-form .compact-form-head .eyebrow{
-  color:#d5b35b!important;
-  font-family:var(--font-num,ui-monospace,monospace);
-  font-size:8px!important;
-  letter-spacing:.18em!important;
+  align-items:flex-end;
+  padding-bottom:12px;
+  border-bottom:2px dashed #3c432d;
 }
 .retro-race-form .compact-form-head h2{
-  color:#f0eee6;
-  font-size:21px;
-  letter-spacing:.02em;
-  text-shadow:2px 2px 0 #050605;
+  margin:0;
+  color:#f5f1df;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:25px;
+  letter-spacing:.04em;
+  text-shadow:2px 2px 0 #4b3a16;
 }
-.retro-race-form .compact-form-head>small{
-  color:#7f8881;
-  font-family:var(--font-num,ui-monospace,monospace);
+.retro-race-form .eyebrow{
+  color:#73d49f!important;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.2em;
+}
+.retro-race-form .compact-form-head small{
+  color:#9d9f91;
+  font:700 9px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.08em;
 }
 .retro-race-form .compact-fields{
-  padding:2px;
-  gap:9px!important;
+  gap:10px!important;
+  margin-top:12px;
 }
-.retro-race-form .compact-fields label{
-  color:#a7aaa4!important;
-  font-family:var(--font-num,ui-monospace,monospace);
-  letter-spacing:.05em;
+.retro-race-form label{
+  color:#b8bdac;
+  font:700 10px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.08em;
+  text-transform:none;
 }
-.retro-race-form .compact-fields input,
-.retro-race-form .compact-fields select{
-  border:1px solid #4a514b!important;
-  border-radius:3px!important;
-  background:#080b09!important;
-  color:#e7e5dc!important;
-  box-shadow:inset 2px 2px 0 rgba(255,255,255,.025), inset -2px -2px 0 rgba(0,0,0,.35);
+.retro-race-form input,
+.retro-race-form select{
+  min-height:46px;
+  margin-top:5px;
+  border:2px solid #394436!important;
+  border-radius:2px!important;
+  background:#0b100c!important;
+  color:#f2eedf!important;
+  font:700 15px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  box-shadow:inset 0 0 0 1px #151b15;
 }
-.retro-race-form .compact-fields input:focus,
-.retro-race-form .compact-fields select:focus{
-  border-color:#b58e3c!important;
-  outline:2px solid rgba(181,142,60,.14)!important;
+.retro-race-form input:focus,
+.retro-race-form select:focus{
+  border-color:#c7a84b!important;
+  outline:2px solid rgba(199,168,75,.15);
 }
-.retro-race-form .compact-fields label.wide input{
-  min-height:42px!important;
-  font-size:17px!important;
+.retro-race-form input::placeholder{color:#596257}
+.retro-race-form .modal-actions{
+  margin-top:14px;
+  padding-top:12px;
+  border-top:2px dashed #3c432d;
 }
-.retro-race-form .compact-actions{
-  border-top:1px solid #3a3f3a!important;
-  background:linear-gradient(180deg,rgba(8,11,9,.96),#080a08)!important;
+.retro-race-form .modal-actions .button{
+  min-height:44px;
+  border-radius:2px!important;
+  border:2px solid #394436;
+  font:800 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.08em;
+  text-transform:uppercase;
 }
-.retro-race-form .compact-actions .button{
-  border-radius:3px!important;
-  min-height:43px!important;
-  font-family:var(--font-num,ui-monospace,monospace);
-  letter-spacing:.05em;
-  box-shadow:2px 2px 0 #050605;
+.retro-race-form .modal-actions .primary{
+  border-color:#1f9c6b!important;
+  background:#11845b!important;
+  box-shadow:3px 3px 0 #0a3c2a;
 }
-.retro-race-form .compact-actions .button.primary{
-  border:1px solid #3b9a70;
-  background:#176b4d;
+.retro-race-form .modal-actions .ghost{
+  background:#111611!important;
+  color:#d8d6c8!important;
 }
-.retro-race-form .compact-actions .button.ghost{
-  border:1px solid #555b55;
-  background:#10130f;
-  color:#d0d2cb;
+.retro-race-form .modal-actions .danger{
+  border-color:#7b3934!important;
+  background:#291311!important;
+  color:#e88980!important;
 }
-.retro-race-form .compact-actions .button.danger{
-  border:1px solid #713735;
-  background:#291314;
-  color:#e78a82;
+.retro-race-form .error{
+  margin:10px 0 0;
+  padding:8px 10px;
+  border:2px solid #7b3934;
+  border-radius:2px;
+  background:#21100e;
+  color:#ff9a8f;
+  font:700 11px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 }
-.retro-race-form #raceFormError,
-.retro-race-form #raceEditError{
-  padding:7px 9px;
-  border:1px solid #653b38;
-  border-radius:3px;
-  background:#1b100f;
-}
-
 @media(max-width:620px){
-  .retro-race-form .compact-form-head{padding:9px 10px 10px}
-  .retro-race-form .compact-form-head h2{font-size:19px}
-  .retro-race-form .compact-fields{gap:8px!important}
-  .retro-race-form .compact-fields input,
-  .retro-race-form .compact-fields select{height:39px!important;min-height:39px!important}
+  .retro-race-form{padding:14px!important}
+  .retro-race-form::before{margin:-14px -14px 13px}
+  .retro-race-form .compact-form-head h2{font-size:22px}
+  .retro-race-form .compact-fields{grid-template-columns:1fr 1fr!important}
+  .retro-race-form .compact-fields .wide{grid-column:1/-1}
+  .retro-race-form .race-date-field{grid-column:1/-1}
 }

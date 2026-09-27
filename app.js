@@ -549,7 +549,15 @@ app.addEventListener('click', event => {
   if (action === 'edit-competition') openCompetitionEdit();
   if (action === 'open-admin') location.hash = `#/competition/${currentCompetitionId}/admin`;
   if (action === 'back-dashboard') location.hash = `#/competition/${currentCompetitionId}`;
-  if (action === 'top-board') document.querySelector('#dashboard-board')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (action === 'top-board') {
+    if (currentView === 'admin') {
+      location.hash = `#/competition/${currentCompetitionId}`;
+      window.setTimeout(() => document.querySelector('#dashboard-board')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+    } else {
+      document.querySelector('#dashboard-board')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    return;
+  }
   if (action === 'add-participant') openParticipantForm();
   if (action === 'add-race') openRaceForm();
   if (action === 'edit-entry') openEntryForm(event.target.closest('[data-race-id]').dataset.raceId, event.target.closest('[data-participant-id]').dataset.participantId);
@@ -788,11 +796,11 @@ function createRace(form) {
   const competition = getCompetition();
   const data = readForm(form);
   const name = String(data.name || '').trim();
-  const error = form.querySelector('#raceError');
+  const error = form.querySelector('#raceFormError');
   if (!name) return showFormError(error, 'レース名を入力してください。');
   competition.races.push({
     id: uid('race'), name, raceDateTime: data.raceDateTime || '', racecourse: String(data.racecourse || '').trim(),
-    gradeType: data.gradeType === 'NON_G1' ? 'NON_G1' : 'G1', note: String(data.note || '').trim(),
+    gradeType: data.gradeType === 'NON_G1' ? 'NON_G1' : 'G1', distance: String(data.distance || '').trim(), note: String(data.note || '').trim(),
     entries: competition.participants.map(participant => defaultEntry(participant.id))
   });
   saveState(); closeModal(); render(); showToast('レースを追加しました');
@@ -836,6 +844,7 @@ function updateRace(form) {
   race.raceDateTime = data.raceDateTime || '';
   race.racecourse = String(data.racecourse || '').trim();
   race.gradeType = data.gradeType === 'NON_G1' ? 'NON_G1' : 'G1';
+  race.distance = String(data.distance || '').trim();
   race.note = String(data.note || '').trim();
   if (race.gradeType === 'G1') {
     race.entries.forEach(entry => { entry.useNonG1 = false; });
@@ -923,9 +932,34 @@ function showFormError(element, message) {
 
 function deleteCompetition() {
   const competition = getCompetition();
-  if (!competition || !confirm(`「${competition.name}」を削除しますか？\n元に戻せません。`)) return;
+  if (!competition) return;
+
+  const first = confirm(
+    `【重要】「${competition.name}」を削除します。\n\n` +
+    `参加者・レース・入力結果・払戻データを含め、この大会のデータをすべて削除します。\n` +
+    `この操作は元に戻せません。\n\n本当に削除しますか？`
+  );
+  if (!first) return;
+
+  const typed = window.prompt(
+    `最終確認です。\n\n削除する大会名「${competition.name}」を、そのまま入力してください。\n\n入力が一致しない場合は削除されません。`,
+    ''
+  );
+  if (typed === null || typed !== competition.name) {
+    showToast('大会名が一致しないため、削除を中止しました');
+    return;
+  }
+
+  const finalConfirm = confirm(`最終確認：\n「${competition.name}」を完全に削除します。\n\nこの操作を実行しますか？`);
+  if (!finalConfirm) {
+    showToast('削除を中止しました');
+    return;
+  }
+
   state.competitions = state.competitions.filter(item => item.id !== competition.id);
-  saveState(); location.hash = ''; showToast('勝負を削除しました');
+  saveState();
+  location.hash = '';
+  showToast('勝負を削除しました');
 }
 
 function render() {

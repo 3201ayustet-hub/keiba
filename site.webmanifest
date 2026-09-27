@@ -2,6 +2,7 @@
   "name": "馬券勝負ボード",
   "short_name": "馬券勝負",
   "description": "馬券で勝負するアプリ",
+  "id": "./index.html",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
